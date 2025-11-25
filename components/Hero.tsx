@@ -1,16 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
-import { Lightbulb, Gamepad2, Share2, Sparkles, ArrowRight, Play, Clock, Heart, Zap } from 'lucide-react';
+import { Lightbulb, Gamepad2, Share2, Sparkles, ArrowRight, Play, Clock, Zap, ChevronRight, ClipboardList, X, Send } from 'lucide-react';
 import { Game } from '../types';
 
 interface HeroProps {
   onStartCreate: (initialPrompt?: string) => void;
   onPlay: (game: Game) => void;
+  isWaitlistOpen: boolean;
+  setIsWaitlistOpen: (isOpen: boolean) => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
+const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay, isWaitlistOpen, setIsWaitlistOpen }) => {
   const [prompt, setPrompt] = useState('');
-  const [loopPhase, setLoopPhase] = useState(0); // 0: Idea, 1: Build, 2: Love
+  const [loopPhase, setLoopPhase] = useState(0); // 0: Idea, 1: Build, 2: Earn
+  const [waitlistData, setWaitlistData] = useState({ email: '', reason: '' });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Cycle the "Proof" animation
   useEffect(() => {
@@ -19,6 +22,18 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
     }, 2000); // 2 seconds per phase
     return () => clearInterval(interval);
   }, []);
+
+  const handleWaitlistSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, send data to backend here
+    setIsSubmitted(true);
+    setTimeout(() => {
+      setIsWaitlistOpen(false);
+      setIsSubmitted(false);
+      setWaitlistData({ email: '', reason: '' });
+      // Optional: Clear prompt or keep it for their "dream"
+    }, 2500);
+  };
 
   // Simplified Gallery Data
   const dummyGames: Game[] = [
@@ -53,79 +68,68 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
   return (
     <div className="relative min-h-screen pt-32 flex flex-col items-center bg-hero-glow overflow-x-hidden">
       
-      {/* 0. Live Badge */}
-      <div className="relative z-10 mb-8 animate-fade-in-up">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.3)]">
-           <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
-           </span>
-           <span className="text-[10px] font-bold tracking-widest uppercase text-slate-300">Live • Zero Code Required</span>
-        </div>
+      {/* 0. Top Visual: Idea -> Build -> Earn */}
+      <div className="relative z-10 mb-10 animate-fade-in-up">
+         <div className="flex items-center gap-6 px-6 py-3 rounded-2xl bg-black/40 border border-white/5 backdrop-blur-sm shadow-xl">
+             {/* Phase 0: Idea */}
+             <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 0 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
+                 <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 flex items-center justify-center border border-brand-cyan/50">
+                     <Zap size={16} className="text-brand-cyan" />
+                 </div>
+                 <span className="text-[10px] font-bold uppercase tracking-wider text-brand-cyan">Idea</span>
+             </div>
+             
+             <div className="h-px w-8 bg-white/10"></div>
+
+             {/* Phase 1: Build */}
+             <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 1 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
+                 <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-500/50">
+                     <Gamepad2 size={16} className="text-purple-400" />
+                 </div>
+                 <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400">Build</span>
+             </div>
+
+             <div className="h-px w-8 bg-white/10"></div>
+
+              {/* Phase 2: Earn */}
+             <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 2 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
+                 <div className="w-8 h-8 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/50">
+                     <Sparkles size={16} className="text-brand-accent" />
+                 </div>
+                 <span className="text-[10px] font-bold uppercase tracking-wider text-brand-accent">Earn</span>
+             </div>
+         </div>
       </div>
 
       {/* 2. Headlines */}
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto mb-12 animate-fade-in-up" style={{animationDelay: '0.1s'}}>
           <h1 className="text-6xl md:text-8xl font-bold font-rajdhani text-white mb-6 leading-[0.85] tracking-tight drop-shadow-2xl">
-            Prompt. Play. Earn.<br/>
+            Turn Ideas Into Games.<br/>
             {/* Moving Gradient Text */}
             <span className="bg-shimmer-gradient bg-[length:200%_auto] animate-text-shimmer bg-clip-text text-transparent">
-               In Under 60 Seconds.
+               No Code Needed.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
              The only platform where wild ideas become monetized arcade hits instantly.
              <span className="block mt-2 text-white opacity-90">
-               We handle the code. You keep <span className="font-bold text-brand-accent border-b border-brand-accent/30 pb-0.5">70% of the revenue.</span>
+               We handle the code. You keep <span className="font-bold text-brand-accent border-b border-brand-accent/30 pb-0.5 shadow-[0_0_10px_rgba(163,230,53,0.3)]">70% of the revenue.</span>
              </span>
           </p>
       </div>
 
-      {/* 3. Looping Proof + Interaction Area */}
+      {/* 3. Interaction Area (Chat Bubble / Waitlist CTA) */}
       <div className="relative z-10 w-full max-w-2xl px-6 mb-24 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
          
-         {/* Animated Loop Visual (Subtle HUD style) */}
-         <div className="flex justify-center mb-8">
-            <div className="flex items-center gap-6 px-6 py-3 rounded-2xl bg-black/40 border border-white/5 backdrop-blur-sm shadow-xl">
-                {/* Phase 0: Type */}
-                <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 0 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
-                    <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 flex items-center justify-center border border-brand-cyan/50">
-                        <Zap size={16} className="text-brand-cyan" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-cyan">Idea</span>
-                </div>
-                
-                <div className="h-px w-8 bg-white/10"></div>
-
-                {/* Phase 1: Build */}
-                <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 1 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-500/50">
-                        <Gamepad2 size={16} className="text-purple-400" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400">Build</span>
-                </div>
-
-                <div className="h-px w-8 bg-white/10"></div>
-
-                 {/* Phase 2: Win */}
-                <div className={`flex flex-col items-center gap-1 transition-all duration-500 ${loopPhase === 2 ? 'opacity-100 scale-105' : 'opacity-40 scale-95 grayscale'}`}>
-                    <div className="w-8 h-8 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/50">
-                        <Sparkles size={16} className="text-brand-accent" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-accent">Earn</span>
-                </div>
-            </div>
-         </div>
-
-         {/* Chat Bubble Input - "Human Designed" Polish */}
+         {/* Chat Bubble Input */}
          <div className="relative group">
              {/* Glow behind */}
-             <div className="absolute -inset-1 bg-gradient-to-r from-brand-cyan via-purple-500 to-brand-cyan rounded-[2.5rem] opacity-20 blur-lg group-hover:opacity-40 transition duration-1000"></div>
+             <div className="absolute -inset-1 bg-gradient-to-r from-brand-cyan via-purple-500 to-brand-accent rounded-[2.5rem] opacity-20 blur-lg group-hover:opacity-40 transition duration-1000"></div>
              
-             <div className="relative bg-[#0a0f1e] rounded-[2rem] shadow-2xl p-2 pl-6 flex flex-col md:flex-row items-center gap-4 border border-white/10 ring-1 ring-white/5">
+             <div className="relative bg-[#0a0f1e] rounded-[2rem] shadow-2xl p-2 pl-6 flex flex-col md:flex-row items-center gap-4 border border-white/10 ring-1 ring-white/5 backdrop-blur-xl">
                 <div className="flex-1 w-full py-2">
                    <div className="flex items-center gap-2 mb-1">
-                      <Sparkles size={12} className="text-brand-cyan animate-pulse" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse"></div>
                       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">AI Game Architect</p>
                    </div>
                     <input 
@@ -134,14 +138,14 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       className="w-full bg-transparent border-none text-white text-xl p-0 focus:ring-0 outline-none font-medium placeholder-slate-600 font-rajdhani"
-                      onKeyDown={(e) => e.key === 'Enter' && onStartCreate(prompt)}
+                      onKeyDown={(e) => e.key === 'Enter' && setIsWaitlistOpen(true)}
                     />
                 </div>
                 <button 
-                  onClick={() => onStartCreate(prompt)}
+                  onClick={() => setIsWaitlistOpen(true)}
                   className="w-full md:w-auto bg-white hover:bg-slate-200 text-black font-bold font-rajdhani text-lg px-8 py-4 rounded-[1.5rem] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 group/btn relative overflow-hidden"
                 >
-                    <span className="relative z-10 flex items-center gap-2">GENERATE <Clock size={18} className="text-slate-900"/></span>
+                    <span className="relative z-10 flex items-center gap-2">JOIN WAITLIST <ClipboardList size={18} className="text-slate-900"/></span>
                 </button>
              </div>
          </div>
@@ -151,7 +155,11 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
             {quickPrompts.map((qp, i) => (
                 <button 
                   key={i}
-                  onClick={() => onStartCreate(qp.text)}
+                  onClick={() => {
+                    setPrompt(qp.text);
+                    // Optional: auto open waitlist after selection?
+                    // setIsWaitlistOpen(true);
+                  }}
                   className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all duration-300"
                 >
                     <span className="text-base group-hover:scale-125 transition-transform duration-300">{qp.emoji}</span> 
@@ -170,8 +178,8 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
                </h3>
                <p className="text-sm text-slate-500">Real games generated by users in the last hour.</p>
              </div>
-             <button className="hidden md:flex items-center gap-2 text-xs font-bold text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg border border-white/5 transition-all">
-                VIEW FULL GALLERY <ArrowRight size={14} />
+             <button className="hidden md:flex items-center gap-2 text-xs font-bold text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg border border-white/5 transition-all group">
+                VIEW FULL GALLERY <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
              </button>
          </div>
 
@@ -205,7 +213,7 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
                          <p className="text-[11px] text-slate-400 mb-4 line-clamp-1">{game.description}</p>
                          
                          <div className="flex gap-2 border-t border-white/5 pt-4">
-                             <button onClick={() => onStartCreate(`${game.title} Remix`)} className="flex-1 text-[10px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider text-left">REMIX IDEA</button>
+                             <button onClick={() => setIsWaitlistOpen(true)} className="flex-1 text-[10px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider text-left">REMIX IDEA</button>
                              <button onClick={() => onPlay(game)} className="text-[10px] font-bold text-brand-cyan hover:text-brand-glow transition-colors uppercase tracking-wider">PLAY NOW</button>
                          </div>
                      </div>
@@ -213,6 +221,76 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay }) => {
              ))}
          </div>
       </div>
+
+      {/* WAITLIST MODAL */}
+      {isWaitlistOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div 
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" 
+              onClick={() => !isSubmitted && setIsWaitlistOpen(false)}
+            ></div>
+            
+            <div className="relative bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-fade-in-up">
+                {isSubmitted ? (
+                    <div className="p-12 text-center">
+                        <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Sparkles size={32} />
+                        </div>
+                        <h3 className="text-2xl font-rajdhani font-bold text-white mb-2">You're on the list!</h3>
+                        <p className="text-slate-400">We've saved your spot. Watch your inbox for your exclusive invite key.</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="px-8 py-6 border-b border-white/5 flex justify-between items-center">
+                            <h3 className="text-xl font-rajdhani font-bold text-white">Join Arcadeen Beta</h3>
+                            <button onClick={() => setIsWaitlistOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        
+                        <form onSubmit={handleWaitlistSubmit} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Your Email</label>
+                                <input 
+                                  type="email" 
+                                  required
+                                  value={waitlistData.email}
+                                  onChange={(e) => setWaitlistData({...waitlistData, email: e.target.value})}
+                                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-brand-cyan focus:border-brand-cyan outline-none transition-all"
+                                  placeholder="you@example.com"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Why Arcadeen?</label>
+                                <textarea 
+                                  required
+                                  value={waitlistData.reason}
+                                  onChange={(e) => setWaitlistData({...waitlistData, reason: e.target.value})}
+                                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-brand-cyan focus:border-brand-cyan outline-none transition-all resize-none h-24"
+                                  placeholder="I want to make a game about..."
+                                />
+                            </div>
+
+                            {prompt && (
+                                <div className="bg-brand-cyan/10 border border-brand-cyan/20 rounded-lg p-3">
+                                    <p className="text-[10px] text-brand-cyan font-bold uppercase tracking-widest mb-1">Your Spark</p>
+                                    <p className="text-sm text-slate-300 italic">"{prompt}"</p>
+                                </div>
+                            )}
+
+                            <button 
+                              type="submit"
+                              className="w-full bg-brand-cyan hover:bg-brand-glow text-black font-bold font-rajdhani text-lg py-3 rounded-lg uppercase tracking-wider shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all flex items-center justify-center gap-2"
+                            >
+                                REQUEST ACCESS <Send size={18} />
+                            </button>
+                        </form>
+                    </>
+                )}
+            </div>
+        </div>
+      )}
 
     </div>
   );

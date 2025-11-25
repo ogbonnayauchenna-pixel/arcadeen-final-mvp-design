@@ -21,6 +21,7 @@ function App() {
   const [initialPrompt, setInitialPrompt] = useState('');
   const [myGames, setMyGames] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
   const navigate = (page: string) => {
     setIsLoading(true);
@@ -60,9 +61,22 @@ function App() {
       alert(`Launching ${game.title}...\n(In full version, this opens the dedicated game player page)`);
   };
 
+  const handleJoinWaitlist = () => {
+      if (currentPage !== 'home') {
+          navigate('home');
+      }
+      // Small timeout to allow navigation to settle if changing pages
+      setTimeout(() => setIsWaitlistOpen(true), currentPage !== 'home' ? 400 : 0);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white font-inter selection:bg-cyan-500 selection:text-black">
-      <Navbar user={user} onNavigate={navigate} currentPage={currentPage} />
+      <Navbar 
+        user={user} 
+        onNavigate={navigate} 
+        currentPage={currentPage} 
+        onJoinWaitlist={handleJoinWaitlist}
+      />
       
       {isLoading && (
         <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur flex items-center justify-center">
@@ -72,7 +86,12 @@ function App() {
 
       <main className="fade-in">
         {currentPage === 'home' && (
-            <Hero onStartCreate={handleStartCreate} onPlay={handlePlayGame} />
+            <Hero 
+                onStartCreate={handleStartCreate} 
+                onPlay={handlePlayGame} 
+                isWaitlistOpen={isWaitlistOpen}
+                setIsWaitlistOpen={setIsWaitlistOpen}
+            />
         )}
         
         {currentPage === 'create' && (

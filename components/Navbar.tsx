@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Gamepad2, Menu, X, User as UserIcon } from 'lucide-react';
 import { User } from '../types';
@@ -7,9 +6,10 @@ interface NavbarProps {
   user: User | null;
   onNavigate: (page: string) => void;
   currentPage: string;
+  onJoinWaitlist: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage }) => {
+const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, onJoinWaitlist }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const navItems = [
@@ -73,10 +73,10 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage }) => {
               </button>
             ) : (
               <button
-                onClick={() => handleNav('login')}
+                onClick={onJoinWaitlist}
                 className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-brand-cyan transition-colors duration-300"
               >
-                Start Free
+                Join Waitlist
               </button>
             )}
           </div>
@@ -111,10 +111,13 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage }) => {
               </button>
             ))}
              <button
-                onClick={() => handleNav(user ? 'dashboard' : 'login')}
+                onClick={() => {
+                  onJoinWaitlist();
+                  setIsOpen(false);
+                }}
                 className="block w-full mt-8 py-4 bg-brand-cyan text-black text-center font-bold font-rajdhani rounded-lg"
               >
-                {user ? 'Dashboard' : 'Start Free'}
+                {user ? 'Dashboard' : 'Join Waitlist'}
               </button>
           </div>
         </div>
