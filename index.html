@@ -19,11 +19,15 @@
             },
             colors: {
               brand: {
-                cyan: '#06b6d4',  // Cyan-500 for a warmer, less harsh neon
-                glow: '#22d3ee',  // Cyan-400 for highlights
+                cyan: '#06b6d4',  // Cyan-500
+                glow: '#22d3ee',  // Cyan-400
                 dark: '#020617',  // Slate-950
                 surface: '#0f172a', // Slate-900
+                accent: '#a3e635', // Lime-400 for revenue/money
               }
+            },
+            backgroundSize: {
+              '200%': '200% auto',
             },
             animation: {
               'float': 'float 6s ease-in-out infinite',
@@ -31,6 +35,7 @@
               'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
               'sparkle': 'sparkle 1s ease-in-out infinite',
+              'text-shimmer': 'textShimmer 3s linear infinite',
             },
             keyframes: {
               float: {
@@ -44,10 +49,15 @@
               sparkle: {
                 '0%, 100%': { opacity: '1', transform: 'scale(1)' },
                 '50%': { opacity: '0.5', transform: 'scale(0.9)' },
+              },
+              textShimmer: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '100%': { backgroundPosition: '200% 50%' },
               }
             },
             backgroundImage: {
               'hero-glow': 'radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, rgba(2, 6, 23, 0) 70%)',
+              'shimmer-gradient': 'linear-gradient(to right, #ffffff 20%, #22d3ee 30%, #a3e635 40%, #ffffff 50%)',
             }
           }
         }
