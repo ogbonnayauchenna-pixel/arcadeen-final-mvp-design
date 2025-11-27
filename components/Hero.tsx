@@ -35,30 +35,30 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay, isWaitlistOpen, setI
     }, 2500);
   };
 
-  // Simplified Gallery Data with ARCADE SPECIFIC IMAGES
+  // Simplified Gallery Data with VIBRANT ARCADE IMAGES
   const dummyGames: Game[] = [
     {
       id: '1', title: 'Zombie Pizza Dash', description: 'Fun run game – shared 500 times',
       prompt: '', code: '', 
-      thumbnailUrl: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=800&auto=format&fit=crop', // Pixel VR/Zombie vibe
+      thumbnailUrl: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=1080&auto=format&fit=crop', // Gaming/Arcade
       views: 5400, earnings: 20.50, author: 'Alex', tags: ['#Casual', '#AI'], isMonetized: true, createdAt: Date.now()
     },
     {
       id: '2', title: 'Space Cat Rescue', description: 'Jump & collect. Simple & addictive.',
       prompt: '', code: '', 
-      thumbnailUrl: 'https://images.unsplash.com/photo-1605347086577-706b21474ed7?q=80&w=800&auto=format&fit=crop', // Neon Space Tunnel
+      thumbnailUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&auto=format&fit=crop', // Retro Tech/Neon
       views: 1200, earnings: 5.00, author: 'Sarah', tags: ['#Jump', '#Cute'], isMonetized: true, createdAt: Date.now()
     },
     {
       id: '3', title: 'Neon Puzzle Block', description: 'Classic vibe with a twist.',
       prompt: '', code: '', 
-      thumbnailUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop', // Retro Arcade
+      thumbnailUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1080&auto=format&fit=crop', // Cyberpunk City
       views: 300, earnings: 0, author: 'Mike', tags: ['#Puzzle', '#Retro'], isMonetized: false, createdAt: Date.now()
     },
     {
       id: '4', title: 'Dino Skater 3000', description: 'Physics fun. Built in 45s.',
       prompt: '', code: '', 
-      thumbnailUrl: 'https://images.unsplash.com/photo-1551103782-8ab07afd45c1?q=80&w=800&auto=format&fit=crop', // Skater/Retro
+      thumbnailUrl: 'https://images.unsplash.com/photo-1614728853913-6591d0012f27?q=80&w=1080&auto=format&fit=crop', // Pixel Grid
       views: 8900, earnings: 42.00, author: 'Jen', tags: ['#Skate', '#Physics'], isMonetized: true, createdAt: Date.now()
     }
   ];
@@ -71,7 +71,7 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay, isWaitlistOpen, setI
 
   return (
     <div className="relative min-h-screen pt-32 flex flex-col items-center bg-brand-dark overflow-x-hidden">
-        {/* Cinematic Spotlight Background - Replaces the Generic Blobs */}
+        {/* Cinematic Spotlight Background */}
         <div className="absolute top-0 left-0 w-full h-[80vh] overflow-hidden pointer-events-none z-0">
              {/* Main top spotlight */}
              <div className="absolute top-[-50%] left-1/2 -translate-x-1/2 w-[120%] h-[150%] bg-aurora opacity-100 mix-blend-screen"></div>
@@ -127,13 +127,13 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay, isWaitlistOpen, setI
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto mb-16 animate-fade-in-up" style={{animationDelay: '0.1s'}}>
           <h1 className="text-6xl md:text-8xl font-bold font-rajdhani text-white mb-6 leading-[0.9] tracking-tight drop-shadow-2xl">
             Turn Ideas Into Games.<br/>
-            {/* Shimmer Text with sharper gradient */}
+            {/* Shimmer Text */}
             <span className="bg-shimmer-gradient bg-[length:200%_auto] animate-text-shimmer bg-clip-text text-transparent">
                No Code Needed.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-slate-400 font-light leading-relaxed max-w-2xl mx-auto">
-             The only platform where wild ideas become monetized arcade hits instantly.
+             Chat and play in 60 seconds. Share with friends and watch it grow
              <span className="block mt-4 text-white opacity-90">
                We handle the code. You keep <span className="font-bold text-brand-accent border-b border-brand-accent/30 pb-0.5">70% of the revenue.</span>
             </span>
@@ -194,16 +194,16 @@ const Hero: React.FC<HeroProps> = ({ onStartCreate, onPlay, isWaitlistOpen, setI
                </button>
           </div>
           
-          {/* GRID: Square Cards */}
+          {/* GRID: Square Cards (aspect-square) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
              {dummyGames.map(game => (
                 <div key={game.id} onClick={() => onPlay(game)} className="group relative aspect-square bg-[#0A0A0A] border border-white/5 rounded-xl overflow-hidden cursor-pointer hover:border-brand-cyan/30 transition-all duration-500 hover:shadow-2xl">
                     
-                    {/* Full Background Image */}
-                    <img src={game.thumbnailUrl} alt={game.title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105" />
+                    {/* Full Background Image - No Grayscale for pop */}
+                    <img src={game.thumbnailUrl} alt={game.title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-105" />
                     
                     {/* Dark overlay for readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90 transition-opacity"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90 transition-opacity"></div>
                     
                     {/* Hover Glow Overlay */}
                     <div className="absolute inset-0 bg-brand-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"></div>

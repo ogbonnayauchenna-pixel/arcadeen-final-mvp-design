@@ -111,41 +111,44 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
     <div className="fixed inset-0 bg-[#0B0E14] text-white flex flex-col font-inter z-50">
       
       {/* 1. Studio Header */}
-      <header className="h-14 border-b border-[#1F242F] bg-[#0F1219] flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-4">
+      <header className="h-20 border-b border-[#1F242F] bg-[#0F1219] flex items-center justify-between px-6 shrink-0">
+        <div className="flex items-center gap-6">
           <button onClick={onExit} className="text-slate-400 hover:text-white transition-colors">
             <ArrowLeft size={20} />
           </button>
-          <div className="flex items-center gap-3 group">
-            <div className="relative flex items-center justify-center w-8 h-8 bg-white/5 rounded-lg border border-white/10 group-hover:border-cyan-500/50 transition-colors duration-500">
-               <Gamepad2 className="h-4 w-4 text-white group-hover:text-cyan-400 transition-colors" />
+          
+          {/* Consistent Brand Logo (Matching Navbar) */}
+          <div className="flex items-center gap-3 cursor-default group">
+            <div className="relative flex items-center justify-center w-10 h-10 bg-white/5 rounded-xl border border-white/10 group-hover:border-cyan-500/50 transition-colors duration-500">
+               <Gamepad2 className="h-5 w-5 text-white group-hover:text-cyan-400 transition-colors" />
             </div>
-            <span className="font-bold font-rajdhani text-lg tracking-wide uppercase text-white group-hover:text-cyan-400 transition-colors">Arcadeen Studio</span>
-            <span className="text-xs bg-[#1F242F] text-slate-400 px-2 py-0.5 rounded border border-[#2A303C]">Beta</span>
+            <span className="text-xl font-bold font-rajdhani text-white tracking-widest uppercase group-hover:text-cyan-400 transition-colors">
+              Arcadeen
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="bg-[#151921] rounded-lg p-1 flex border border-[#2A303C]">
             <button 
               onClick={() => setViewMode('desktop')} 
-              className={`p-1.5 rounded transition-all ${viewMode === 'desktop' ? 'bg-[#2A303C] text-white' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`p-2 rounded transition-all ${viewMode === 'desktop' ? 'bg-[#2A303C] text-white' : 'text-slate-500 hover:text-slate-300'}`}
             >
-              <Monitor size={16} />
+              <Monitor size={18} />
             </button>
             <button 
               onClick={() => setViewMode('mobile')} 
-              className={`p-1.5 rounded transition-all ${viewMode === 'mobile' ? 'bg-[#2A303C] text-white' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`p-2 rounded transition-all ${viewMode === 'mobile' ? 'bg-[#2A303C] text-white' : 'text-slate-500 hover:text-slate-300'}`}
             >
-              <Smartphone size={16} />
+              <Smartphone size={18} />
             </button>
           </div>
-          <div className="h-6 w-px bg-[#2A303C]"></div>
+          <div className="h-8 w-px bg-[#2A303C]"></div>
           <button 
             onClick={handlePublish}
-            className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+            className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold font-rajdhani text-sm px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all uppercase tracking-wider"
           >
-            <Rocket size={16} /> Publish Game
+            <Rocket size={16} /> Publish
           </button>
         </div>
       </header>
@@ -154,39 +157,28 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
       <div className="flex flex-1 overflow-hidden">
         
         {/* LEFT PANEL: Tools & Assets */}
-        <div className="w-72 bg-[#0F1219] border-r border-[#1F242F] flex flex-col">
+        <div className="w-80 bg-[#0F1219] border-r border-[#1F242F] flex flex-col">
           {/* Tab Navigation */}
           <div className="flex border-b border-[#1F242F]">
-            <button 
-              onClick={() => setActiveTab('create')}
-              className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'create' ? 'text-cyan-400 border-b-2 border-cyan-400 bg-[#151921]' : 'text-slate-500 hover:text-white'}`}
-            >
-              Create
-            </button>
-            <button 
-              onClick={() => setActiveTab('design')}
-              disabled={!generatedGame}
-              className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'design' ? 'text-cyan-400 border-b-2 border-cyan-400 bg-[#151921]' : 'text-slate-500 hover:text-white disabled:opacity-30'}`}
-            >
-              Design
-            </button>
-            <button 
-              onClick={() => setActiveTab('monetize')}
-              disabled={!generatedGame}
-              className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${activeTab === 'monetize' ? 'text-cyan-400 border-b-2 border-cyan-400 bg-[#151921]' : 'text-slate-500 hover:text-white disabled:opacity-30'}`}
-            >
-              Earn
-            </button>
+            {['create', 'design', 'monetize'].map(tab => (
+                 <button 
+                    key={tab}
+                    onClick={() => setActiveTab(tab as any)}
+                    className={`flex-1 py-4 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === tab ? 'text-cyan-400 border-b-2 border-cyan-400 bg-[#151921]' : 'text-slate-500 hover:text-white'}`}
+                >
+                    {tab}
+                </button>
+            ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-5 custom-scrollbar">
             
             {/* CREATE TAB */}
             {activeTab === 'create' && (
               <div className="space-y-6 animate-fade-in">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Choose Template</h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Choose Template</h3>
+                  <div className="grid grid-cols-2 gap-3">
                     {TEMPLATES.map(t => (
                       <button
                         key={t.id}
@@ -194,7 +186,7 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                         className={`p-3 rounded-xl border text-left transition-all ${selectedTemplate?.id === t.id ? 'bg-cyan-900/20 border-cyan-500/50 ring-1 ring-cyan-500/50' : 'bg-[#151921] border-[#2A303C] hover:border-slate-600'}`}
                       >
                         <div className="text-2xl mb-2">{t.icon}</div>
-                        <div className="text-sm font-bold text-white mb-1">{t.name}</div>
+                        <div className="text-sm font-bold text-white mb-1 font-rajdhani">{t.name}</div>
                         <div className="text-[10px] text-slate-500 leading-tight">{t.category}</div>
                       </button>
                     ))}
@@ -202,19 +194,19 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                 </div>
 
                 <div>
-                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Prompt</h3>
+                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Prompt</h3>
                    <div className="bg-[#151921] border border-[#2A303C] rounded-xl p-3 focus-within:border-cyan-500/50 transition-colors">
                      <textarea 
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         placeholder="Describe your game idea... e.g. 'A platformer where you play as a cyberpunk cat'"
-                        className="w-full bg-transparent text-sm text-white placeholder-slate-600 focus:outline-none resize-none h-24"
+                        className="w-full bg-transparent text-sm text-white placeholder-slate-600 focus:outline-none resize-none h-32"
                      />
                    </div>
                    <button 
                       onClick={handleBuild}
                       disabled={isBuilding || (!prompt && !selectedTemplate)}
-                      className="w-full mt-3 bg-white hover:bg-slate-200 text-black font-bold text-sm py-3 rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                      className="w-full mt-3 bg-white hover:bg-slate-200 text-black font-bold font-rajdhani text-sm py-3 rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50 uppercase tracking-wider"
                    >
                       {isBuilding ? <Zap size={16} className="animate-spin"/> : <Zap size={16}/>}
                       {isBuilding ? 'Generating...' : 'Generate Game'}
@@ -232,14 +224,14 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                             <Code size={16} className="text-blue-400" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-white mb-1">AI Copilot Active</h3>
-                            <p className="text-xs text-slate-400">Describe changes to modify the code instantly.</p>
+                            <h3 className="text-sm font-bold text-white mb-1 font-rajdhani uppercase">AI Copilot Active</h3>
+                            <p className="text-[10px] text-slate-400">Describe changes to modify the code instantly.</p>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Refine Gameplay</h3>
+                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Refine Gameplay</h3>
                    <textarea 
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
@@ -250,19 +242,19 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                    <button 
                       onClick={handleBuild}
                       disabled={isBuilding}
-                      className="w-full bg-[#1F242F] hover:bg-[#2A303C] text-white font-bold text-xs py-2 rounded-lg border border-[#2A303C] transition-all"
+                      className="w-full bg-[#1F242F] hover:bg-[#2A303C] text-white font-bold font-rajdhani text-xs py-2 rounded-lg border border-[#2A303C] transition-all uppercase tracking-wider"
                    >
                       Apply Changes
                    </button>
                 </div>
 
                 <div>
-                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Quick Actions</h3>
+                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Quick Actions</h3>
                    <div className="grid grid-cols-2 gap-2">
-                      <button onClick={() => setPrompt("Make it harder")} className="bg-[#151921] hover:bg-[#1F242F] text-xs text-slate-300 py-2 rounded border border-[#2A303C]">Make Harder</button>
-                      <button onClick={() => setPrompt("Add a score counter")} className="bg-[#151921] hover:bg-[#1F242F] text-xs text-slate-300 py-2 rounded border border-[#2A303C]">Add Score</button>
-                      <button onClick={() => setPrompt("Change colors to neon")} className="bg-[#151921] hover:bg-[#1F242F] text-xs text-slate-300 py-2 rounded border border-[#2A303C]">Neon Theme</button>
-                      <button onClick={() => setPrompt("Add sound effects")} className="bg-[#151921] hover:bg-[#1F242F] text-xs text-slate-300 py-2 rounded border border-[#2A303C]">Add SFX</button>
+                      <button onClick={() => setPrompt("Make it harder")} className="bg-[#151921] hover:bg-[#1F242F] text-[10px] font-bold uppercase tracking-wider text-slate-300 py-3 rounded border border-[#2A303C]">Make Harder</button>
+                      <button onClick={() => setPrompt("Add a score counter")} className="bg-[#151921] hover:bg-[#1F242F] text-[10px] font-bold uppercase tracking-wider text-slate-300 py-3 rounded border border-[#2A303C]">Add Score</button>
+                      <button onClick={() => setPrompt("Change colors to neon")} className="bg-[#151921] hover:bg-[#1F242F] text-[10px] font-bold uppercase tracking-wider text-slate-300 py-3 rounded border border-[#2A303C]">Neon Theme</button>
+                      <button onClick={() => setPrompt("Add sound effects")} className="bg-[#151921] hover:bg-[#1F242F] text-[10px] font-bold uppercase tracking-wider text-slate-300 py-3 rounded border border-[#2A303C]">Add SFX</button>
                    </div>
                 </div>
               </div>
@@ -273,7 +265,7 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
               <div className="space-y-6 animate-fade-in">
                  <div className="bg-[#151921] border border-[#2A303C] rounded-xl p-4">
                     <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm font-bold text-white">Enable Monetization</span>
+                        <span className="text-sm font-bold text-white font-rajdhani uppercase tracking-wide">Enable Monetization</span>
                         <button 
                            onClick={() => setMonetization(m => ({...m, enabled: !m.enabled}))}
                            className={`w-10 h-5 rounded-full p-0.5 transition-colors ${monetization.enabled ? 'bg-cyan-500' : 'bg-slate-700'}`}
@@ -285,17 +277,17 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                     {monetization.enabled && (
                         <div className="space-y-4 pt-4 border-t border-[#2A303C]">
                             <div>
-                                <label className="block text-xs text-slate-400 mb-2">Revenue Model</label>
+                                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Revenue Model</label>
                                 <div className="flex rounded-lg bg-[#0F1219] p-1 border border-[#2A303C]">
                                     <button 
                                       onClick={() => setMonetization(m => ({...m, type: 'ads'}))}
-                                      className={`flex-1 py-1.5 text-xs rounded font-medium transition-colors ${monetization.type === 'ads' ? 'bg-[#1F242F] text-white shadow' : 'text-slate-500'}`}
+                                      className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded transition-colors ${monetization.type === 'ads' ? 'bg-[#1F242F] text-white shadow' : 'text-slate-500'}`}
                                     >
                                         Ads
                                     </button>
                                     <button 
                                       onClick={() => setMonetization(m => ({...m, type: 'paywall'}))}
-                                      className={`flex-1 py-1.5 text-xs rounded font-medium transition-colors ${monetization.type === 'paywall' ? 'bg-[#1F242F] text-white shadow' : 'text-slate-500'}`}
+                                      className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded transition-colors ${monetization.type === 'paywall' ? 'bg-[#1F242F] text-white shadow' : 'text-slate-500'}`}
                                     >
                                         Paywall
                                     </button>
@@ -304,7 +296,7 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
 
                             {monetization.type === 'paywall' && (
                                 <div>
-                                    <label className="block text-xs text-slate-400 mb-2">Price ($USD)</label>
+                                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Price ($USD)</label>
                                     <input 
                                       type="number" 
                                       value={monetization.price}
@@ -316,8 +308,8 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
 
                              <div className="bg-green-500/10 border border-green-500/20 p-3 rounded">
                                 <div className="flex justify-between text-xs mb-1">
-                                    <span className="text-green-400 font-bold">Estimated Share</span>
-                                    <span className="text-white">70%</span>
+                                    <span className="text-green-400 font-bold uppercase tracking-wider text-[10px]">Estimated Share</span>
+                                    <span className="text-white font-mono">70%</span>
                                 </div>
                                 <div className="text-[10px] text-slate-400">You keep majority of revenue generated.</div>
                             </div>
@@ -333,12 +325,12 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
         {/* CENTER: Canvas */}
         <div className="flex-1 bg-[#090b0f] flex flex-col relative">
           {/* Canvas Toolbar */}
-          <div className="h-10 border-b border-[#1F242F] bg-[#0F1219] flex items-center justify-between px-4">
+          <div className="h-12 border-b border-[#1F242F] bg-[#0F1219] flex items-center justify-between px-6">
               <div className="flex items-center gap-2">
-                 <span className="text-xs text-slate-500">{generatedGame ? `${generatedGame.title} (Draft)` : 'Untitled Project'}</span>
+                 <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{generatedGame ? `${generatedGame.title} (Draft)` : 'New Project'}</span>
               </div>
               <div className="flex items-center gap-2">
-                 {isBuilding && <span className="text-xs text-cyan-400 animate-pulse flex items-center gap-1"><Zap size={12}/> Building... {Math.round(buildProgress)}%</span>}
+                 {isBuilding && <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest animate-pulse flex items-center gap-1"><Zap size={12}/> Building... {Math.round(buildProgress)}%</span>}
               </div>
           </div>
 
@@ -349,7 +341,7 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                       <div className="w-16 h-16 rounded-2xl bg-[#151921] border border-[#2A303C] flex items-center justify-center mx-auto mb-4">
                           <Layers size={32} className="text-slate-600" />
                       </div>
-                      <h3 className="text-slate-300 font-bold mb-1">Ready to Create</h3>
+                      <h3 className="text-slate-300 font-bold mb-1 font-rajdhani uppercase tracking-wide">Ready to Create</h3>
                       <p className="text-slate-500 text-sm">Select a template or type a prompt to begin.</p>
                   </div>
               )}
@@ -358,7 +350,7 @@ const Studio: React.FC<StudioProps> = ({ initialPrompt, onSaveGame, onExit }) =>
                   <div 
                     className={`transition-all duration-300 shadow-2xl relative ${
                         viewMode === 'mobile' 
-                        ? 'w-[375px] h-[667px] rounded-[40px] border-[8px] border-[#1F242F] bg-black' 
+                        ? 'w-[375px] h-[667px] rounded-[40px] border-[12px] border-[#1F242F] bg-black' 
                         : 'w-full h-full max-w-4xl max-h-[800px] rounded-lg border border-[#2A303C] bg-black'
                     }`}
                   >
