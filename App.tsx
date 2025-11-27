@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Generator from './components/Generator';
+import Studio from './components/Studio';
 import Pricing from './components/Pricing';
 import { User, Game } from './types';
 import { Loader2 } from 'lucide-react';
@@ -69,8 +69,19 @@ function App() {
       setTimeout(() => setIsWaitlistOpen(true), currentPage !== 'home' ? 400 : 0);
   };
 
+  // Full Screen Studio Mode Check
+  if (currentPage === 'create') {
+      return (
+          <Studio 
+            initialPrompt={initialPrompt} 
+            onSaveGame={handleSaveGame} 
+            onExit={() => navigate('dashboard')} 
+          />
+      );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-inter selection:bg-cyan-500 selection:text-black">
+    <div className="min-h-screen bg-brand-dark text-white font-inter selection:bg-brand-cyan selection:text-black">
       <Navbar 
         user={user} 
         onNavigate={navigate} 
@@ -79,8 +90,8 @@ function App() {
       />
       
       {isLoading && (
-        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur flex items-center justify-center">
-            <Loader2 className="w-10 h-10 text-cyan-400 animate-spin" />
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur flex items-center justify-center">
+            <Loader2 className="w-10 h-10 text-brand-cyan animate-spin" />
         </div>
       )}
 
@@ -93,21 +104,17 @@ function App() {
                 setIsWaitlistOpen={setIsWaitlistOpen}
             />
         )}
-        
-        {currentPage === 'create' && (
-            <Generator initialPrompt={initialPrompt} onSaveGame={handleSaveGame} />
-        )}
 
         {currentPage === 'pricing' && (
             <Pricing />
         )}
 
         {currentPage === 'gallery' && (
-             <div className="min-h-screen pt-24 px-4 bg-slate-950 text-center">
-                 <h2 className="text-4xl font-rajdhani font-bold mb-4 uppercase text-white">Public Gallery</h2>
-                 <p className="text-slate-400 mb-8">Discover games created by the community.</p>
-                 <div className="max-w-7xl mx-auto h-96 flex items-center justify-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/50">
-                     <p className="text-slate-600 font-mono">Infinite Scroll Component Loading...</p>
+             <div className="min-h-screen pt-24 px-4 bg-brand-dark text-center">
+                 <h2 className="text-4xl font-rajdhani font-bold mb-4 uppercase text-white tracking-widest">Public Gallery</h2>
+                 <p className="text-slate-400 mb-8 font-light">Discover games created by the community.</p>
+                 <div className="max-w-7xl mx-auto h-96 flex items-center justify-center border border-white/5 rounded-xl bg-white/5">
+                     <p className="text-slate-600 font-mono text-sm">Infinite Scroll Component Loading...</p>
                  </div>
              </div>
         )}
@@ -117,16 +124,16 @@ function App() {
                 <div className="flex flex-wrap justify-between items-end mb-12 gap-4">
                     <div>
                         <h1 className="text-4xl md:text-5xl font-rajdhani font-bold text-white uppercase tracking-tighter">My Arcade</h1>
-                        <p className="text-slate-400 mt-2">Welcome back, <span className="text-cyan-400">{user.name}</span></p>
+                        <p className="text-slate-400 mt-2">Welcome back, <span className="text-brand-cyan">{user.name}</span></p>
                     </div>
-                    <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center gap-6 shadow-lg">
+                    <div className="bg-[#0A0A0A] border border-white/5 p-4 rounded-xl flex items-center gap-6 shadow-lg">
                         <div>
-                            <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Total Earnings</p>
-                            <p className="text-3xl font-mono text-green-400 font-bold">$0.00</p>
+                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Total Earnings</p>
+                            <p className="text-3xl font-mono text-brand-accent font-bold">$0.00</p>
                         </div>
-                        <div className="h-8 w-px bg-slate-800"></div>
+                        <div className="h-8 w-px bg-white/10"></div>
                         <div>
-                            <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Games</p>
+                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Games</p>
                             <p className="text-3xl font-mono text-white font-bold">{myGames.length}</p>
                         </div>
                     </div>
@@ -135,36 +142,36 @@ function App() {
                 <div className="mb-10">
                    <button 
                      onClick={() => navigate('create')}
-                     className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold font-rajdhani px-8 py-4 rounded uppercase tracking-widest shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all"
+                     className="bg-brand-cyan hover:bg-white text-black font-bold font-rajdhani px-8 py-4 rounded uppercase tracking-widest shadow-glow transition-all"
                    >
                      + Create New Game
                    </button>
                 </div>
 
-                <h3 className="text-2xl font-bold font-rajdhani uppercase tracking-wide mb-6 text-white border-b border-white/10 pb-4">Recent Creations</h3>
+                <h3 className="text-xl font-bold font-rajdhani uppercase tracking-widest mb-6 text-white border-b border-white/10 pb-4">Recent Creations</h3>
                 
                 {myGames.length === 0 ? (
-                    <div className="text-center py-32 bg-slate-900/30 rounded-xl border border-dashed border-slate-800">
+                    <div className="text-center py-32 bg-white/5 rounded-xl border border-dashed border-white/10">
                         <p className="text-slate-500 text-lg mb-4">You haven't built any games yet.</p>
-                        <button onClick={() => navigate('create')} className="text-cyan-400 hover:text-white underline font-bold">Start your first project</button>
+                        <button onClick={() => navigate('create')} className="text-brand-cyan hover:text-white underline font-bold text-sm uppercase tracking-wider">Start your first project</button>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                          {myGames.map(game => (
-                             <div key={game.id} className="group bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-cyan-500/50 transition-all shadow-xl hover:shadow-cyan-500/10 cursor-pointer" 
+                             <div key={game.id} className="group bg-[#0A0A0A] border border-white/5 rounded-xl overflow-hidden hover:border-brand-cyan/50 transition-all shadow-xl hover:shadow-glow cursor-pointer" 
                                   onClick={() => {
                                       setInitialPrompt(game.prompt); 
                                       navigate('create');
                                   }}>
-                                 <div className="h-40 bg-slate-950 relative overflow-hidden">
+                                 <div className="h-40 bg-black relative overflow-hidden">
                                      <iframe srcDoc={game.code} className="w-[200%] h-[200%] opacity-50 pointer-events-none scale-50 origin-top-left" title="thumb" />
-                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                                     <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
                                  </div>
                                  <div className="p-4">
                                      <h4 className="font-bold text-white truncate font-rajdhani text-lg uppercase">{game.title}</h4>
                                      <div className="flex justify-between mt-3 text-xs">
                                          <span className="text-slate-400">{game.views} plays</span>
-                                         <span className={`font-bold ${game.isMonetized ? "text-green-400" : "text-slate-600"}`}>
+                                         <span className={`font-bold ${game.isMonetized ? "text-brand-accent" : "text-slate-600"}`}>
                                              {game.isMonetized ? "MONETIZED" : "DRAFT"}
                                          </span>
                                      </div>
@@ -177,11 +184,13 @@ function App() {
         )}
       </main>
 
-      <footer className="bg-slate-950 border-t border-slate-900 py-12 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="text-slate-500 text-sm font-rajdhani uppercase tracking-widest">© 2024 Arcadeen. AI Game Generator.</p>
-        </div>
-      </footer>
+      {currentPage !== 'create' && (
+        <footer className="bg-black border-t border-white/5 py-12 mt-auto">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+                <p className="text-slate-600 text-xs font-rajdhani uppercase tracking-widest">© 2024 Arcadeen. AI Game Generator.</p>
+            </div>
+        </footer>
+      )}
     </div>
   );
 }

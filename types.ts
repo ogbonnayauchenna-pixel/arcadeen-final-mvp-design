@@ -1,4 +1,3 @@
-
 export interface Game {
   id: string;
   title: string;
@@ -32,4 +31,13 @@ export interface Plan {
   features: string[];
   highlight?: boolean;
   limit?: string;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  description: string;
+  icon: string; // Emoji or URL
+  category: 'Action' | 'Puzzle' | 'Arcade' | 'Strategy';
+  basePrompt: string;
 }
